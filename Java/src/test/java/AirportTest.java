@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class AirportTest {
-    private static List<Plane> planes = Arrays.asList(
+    private static final List<Plane> planes = Arrays.asList(
             new PassengerPlane("Boeing-737", 900, 12000, 60500, 164),
             new PassengerPlane("Boeing-737-800", 940, 12300, 63870, 192),
             new PassengerPlane("Boeing-747", 980, 16100, 70500, 242),
@@ -35,7 +35,7 @@ public class AirportTest {
     @Test
     public void testGetTransportMilitaryPlanesReturnsTransportMilitaryPlanesOnly() {
         Airport airport = new Airport(planes);
-        List<MilitaryPlane> transportMilitaryPlanes = airport.getMilitaryPlanes(MilitaryType.TRANSPORT);
+        List<MilitaryPlane> transportMilitaryPlanes = airport.getMilitaryPlanesOfMilitaryType(MilitaryType.TRANSPORT);
         Assert.assertTrue(transportMilitaryPlanes.stream()
                 .allMatch(plane -> plane.getMilitaryType() == MilitaryType.TRANSPORT));
     }
@@ -52,15 +52,15 @@ public class AirportTest {
     public void testSortingByMaxLoadCapacityIsInAscendingOrder() {
         Airport airport = new Airport(planes);
         airport.sortByMaxLoadCapacity();
-        List<? extends Plane> planesSortedByMaxLoadCapacity = airport.getPlanes();
-        Assert.assertFalse(IntStream.range(1,planesSortedByMaxLoadCapacity.size())
-                .anyMatch(i -> planesSortedByMaxLoadCapacity.get(i).getMaxLoadCapacity() < planesSortedByMaxLoadCapacity.get(i-1).getMaxLoadCapacity()));
+        List<Plane> sortedPlanes = airport.getPlanes();
+        Assert.assertFalse(IntStream.range(1,sortedPlanes.size())
+                .anyMatch(i -> sortedPlanes.get(i).getMaxLoadCapacity() < sortedPlanes.get(i-1).getMaxLoadCapacity()));
     }
 
     @Test
     public void testMilitaryPlanesHasAtLeastOneBomber() {
         Airport airport = new Airport(planes);
-        List<MilitaryPlane> bomberMilitaryPlanes = airport.getMilitaryPlanes(MilitaryType.BOMBER);
+        List<MilitaryPlane> bomberMilitaryPlanes = airport.getMilitaryPlanesOfMilitaryType(MilitaryType.BOMBER);
         Assert.assertTrue(bomberMilitaryPlanes.stream()
                 .anyMatch(plane -> plane.getMilitaryType() == MilitaryType.BOMBER));
     }
